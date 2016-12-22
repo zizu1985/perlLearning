@@ -56,7 +56,7 @@ foreach (0..3) {
 # subroutine reference
 my $sub = \&double;
 my @r = $sub->(\@output, 4);
-print join ":" , @r;
 print "\n";
  
 @r = $sub->(\@output, 3);
+
