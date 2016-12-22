@@ -59,3 +59,4 @@ my @r = $sub->(\@output, 4);
 print join ":" , @r;
 print "\n";
  
+@r = $sub->(\@output, 3);
