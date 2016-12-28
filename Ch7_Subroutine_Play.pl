@@ -5,6 +5,8 @@ use Params::Validate qw(validate validate_pos);
 use Scalar::Util qw(looks_like_number);
 use Carp qw(carp);
 use Try::Tiny;
+use Data::Dumper;
+use Storable qw(dclone);
 
 eval "use aa";
 if ( my $error = $@ ) {
@@ -88,5 +90,38 @@ sub random_die_rolls($@) {
 
 my @rolls = random_die_rolls 3 ,6 ,8, 12;
 print join "\n", @rolls;
+
+
+
+### Treat input hash as reference inside subroutine
+print "\nPassing hash and operating on hash reference using prototypes\n";
+###
+ 
+sub my_lc(\%) {
+	
+	my $input_hash = shift;
+	my %out_hash = % {dclone($input_hash)};
+	my $ref = \%out_hash;
+	
+	foreach my $key (keys %out_hash) {
+		next if ref $ref->{$key};
+		$ref->{$key} = lc $ref->{$key}; 
+	}
+	
+	return %out_hash;
+		
+}
+
+my %my_hash = 
+(
+	a => "AA",
+	b => [1 , 2, 3],
+	c => "EE"
+);
+
+print Dumper(\%my_hash);
+my %out = my_lc(%my_hash);
+print Dumper(\%my_hash);
+print Dumper(\%out);
 
 
