@@ -60,3 +60,33 @@ print "\n";
  
 @r = $sub->(\@output, 3);
 
+# Call subroutine with incorrect prototype
+sub sreverse($) {
+	my $string = shift;
+	return scalar reverse $string;
+}
+
+# Too many arguments for main::sreverse at C:/Users/zizu/workspace/Chapter4_tests/Ch7_Subroutine_Play.pl line 69, near ""that")"
+# Execution of C:/Users/zizu/workspace/Chapter4_tests/Ch7_Subroutine_Play.pl aborted due to compilation errors (#1)
+#    (F) The function requires fewer arguments than you specified.
+#
+#print sreverse("this", "that");
+
+print "this", " ", sreverse("this");
+print "\n";
+
+sub random_die_rolls($@) {
+	my ( $number_of_rolls, @number_of_sides ) = @_;
+	my @results;
+	foreach my $num_sides (@number_of_sides) {
+		my $total = 0;
+		$total += int( 1 + rand($num_sides) ) for 1 .. $number_of_rolls;
+		push @results, $total;
+	}
+	return @results;
+}
+
+my @rolls = random_die_rolls 3 ,6 ,8, 12;
+print join "\n", @rolls;
+
+
