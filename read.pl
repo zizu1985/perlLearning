@@ -24,6 +24,8 @@ while (<DATA>) {
 }
 
 print Dumper(\%config);
+
+print values %config;
 	
 __DATA__
 # max_tries = 3
