@@ -28,11 +28,6 @@ print Dumper(\%config);
 print values %config;
 	
 __DATA__
-# max_tries = 3
-max_tries = 2 continues
-
-timeout = 30
-# only these people are OK
 user = Ovid
 user = Sally
 user = Bob
