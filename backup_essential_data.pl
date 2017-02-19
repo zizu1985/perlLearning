@@ -11,6 +11,7 @@ use feature 'say';
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use File::stat;
 use File::Basename;
+use File::Find qw(find);
 
 my @importantFolders = qw(D:\Materials\Linux\Linux_Operations_Essentials_Course);
 
@@ -41,17 +42,34 @@ sub backupFolder
 	my $name = fileparse($folder);
 	my $targetFile = $target_dir."\\$name.zip";
 	
+	# Remove target zip file if exists
+	if (-e $targetFile) {
+		say "Target zip file exists $targetFile";
+		if (! unlink $targetFile) {
+			say "Can't remove zip file $targetFile";
+		} 
+		else {
+			say "Zip file $targetFile removed";
+		}
+	}
+	
 	my $zip = Archive::Zip->new();
 	my $dir_member = $zip->addTree($folder,'');
+	
+	foreach my $member (map { $zip->memberNamed ($_) } $zip->memberNames)
+	{
+		$member->desiredCompressionLevel( Archive::Zip::COMPRESSION_LEVEL_BEST_COMPRESSION );		
+	}
 	
 	unless ( $zip->writeToFileNamed($targetFile) == AZ_OK ) {
        croak 'write error';
     }
-		
-	my $st = stat($folder);
+	
+	my $srcSize;	
+	find(sub { $srcSize += -s if -f }, $folder);
 	my $stComp = stat($targetFile);
 		
-	return ($targetFile, $st->size, $stComp->size);		
+	return ($targetFile, $srcSize, $stComp->size);		
 		
 }
 
