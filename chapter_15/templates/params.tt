@@ -1,0 +1,17 @@
+<html>
+<head><title>Parameters</title></head>
+<body>
+	<p>Hello [% username %]. You have [% time %] seconds left.</p>
+[% IF have_params %]
+	<p>Our list of params:</p>
+	<table rule="all">
+		<tr><th>Name</th><th>Value</th></tr>
+	[% FOREACH param IN params %]
+		<tr><td>[% param.name %]</td><td>[% param.value %]</td></tr>
+	[% END %]
+		</table>		
+[% ELSE %]
+	<p><strong>No params supplied!</strong></p>
+[% END %]	
+</body>
+</html>
